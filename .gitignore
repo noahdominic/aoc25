@@ -41,3 +41,7 @@
 *.dwo
 
 input/*
+build/*
+
+# VS code stuff
+.vscode/*
