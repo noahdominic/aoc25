@@ -15,7 +15,7 @@ long repeat_number(long x, int k) {
     }
 
     // Convert back to long
-    return std::stoll(repeated);
+    return std::stol(repeated);
 }
 
 long
