@@ -8,6 +8,7 @@ int main(int argc, char** argv)
 
     std::cout << "Hello" << std::endl;
     std::cout << day01_part1() << std::endl;
+    std::cout << day01_part2() << std::endl;
     
     return 0;
 }
