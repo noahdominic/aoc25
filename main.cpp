@@ -15,6 +15,7 @@ int main(int argc, char** argv)
     // std::cout << day02_part1() << std::endl;
     // std::cout << day02_part2() << std::endl;
     std::cout << day03_part1() << std::endl;
+    std::cout << day03_part2() << std::endl;
 
     return 0;
 }
