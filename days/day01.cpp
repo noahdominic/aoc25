@@ -14,7 +14,7 @@
 int    
 day01_part1()
 {
-    int current_pos, zero_counter, rollover;
+    int current_pos, zero_counter;
 
     current_pos = INITIAL_POS;
     zero_counter = 0;

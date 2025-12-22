@@ -9,8 +9,6 @@ day02_part1()
 {
     std::vector<std::string> data = utils::read_file("input/day02.txt");
     long total = 0;
-    
-    // return brute_force_sum(data);
 
     for (std::string& line : data)
     {
