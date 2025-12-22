@@ -6,6 +6,7 @@ add_executable(aoc25
     common/utils.cpp
     days/day01.cpp
     days/day02.cpp
+    days/day03.cpp
 )
 
 target_include_directories(aoc25
