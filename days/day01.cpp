@@ -11,10 +11,10 @@
 #define INITIAL_POS 50
 
 
-int
+int    
 day01_part1()
 {
-    int current_pos, zero_counter;
+    int current_pos, zero_counter, rollover;
 
     current_pos = INITIAL_POS;
     zero_counter = 0;
@@ -34,10 +34,6 @@ day01_part1()
         // is the default in C++.   For more info, check out
         // https://en.wikipedia.org/wiki/Modulo
         current_pos = ((current_pos % MAX_VALUE) + MAX_VALUE) % MAX_VALUE; 
-
-        if (current_pos == 0) {
-            ++zero_counter;
-        }
     }
 
     return zero_counter;
