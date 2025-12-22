@@ -135,7 +135,6 @@ day02_part2()
                 std::vector<long> checked; 
                 while (len / divisor >= 1.)
                 {
-                    // std::cout << len << "/" << divisor << "=" << len/divisor << std::endl;
                     if (len % divisor != 0){
                         divisor++;
                         continue;   // must be even
