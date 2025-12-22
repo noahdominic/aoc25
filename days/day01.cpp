@@ -1,7 +1,6 @@
 #include <cmath>
 #include <string>
 #include <vector>
-#include <iostream>
 #include "utils.hpp"
 
 // The 'knob' doesn't go above 99 and loops back to 0

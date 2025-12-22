@@ -2,7 +2,6 @@
 #include <cmath>
 #include <string>
 #include <vector>
-#include <iostream>
 #include "utils.hpp"
 
 long repeat_number(long x, int k) {
@@ -165,10 +164,7 @@ day02_part2()
                             total += n;
                             checked.push_back(n);
                         }
-
-                        std::cout << n << std::endl;
                     }
-
                     divisor++;
                 }
             }
