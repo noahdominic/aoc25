@@ -1,4 +1,6 @@
 #include "day01.hpp"
+#include "day02.hpp"
+#include "utils.hpp"
 #include <iostream>
 
 int main(int argc, char** argv)
@@ -9,6 +11,7 @@ int main(int argc, char** argv)
     std::cout << "Hello" << std::endl;
     std::cout << day01_part1() << std::endl;
     std::cout << day01_part2() << std::endl;
-    
+    std::cout << day02_part1() << std::endl;
+
     return 0;
 }
