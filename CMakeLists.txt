@@ -4,6 +4,7 @@ project(aoc25)
 add_executable(aoc25
     main.cpp
     common/utils.cpp
+    days/day01.cpp
 )
 
 target_include_directories(aoc25
