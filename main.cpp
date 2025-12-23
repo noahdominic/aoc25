@@ -18,8 +18,13 @@ int main(int argc, char** argv)
     // std::cout << day02_part2() << std::endl;
     // std::cout << day03_part1() << std::endl;
     // std::cout << day03_part2() << std::endl;
+<<<<<<< HEAD
     std::cout << day05_part1() << std::endl;
     std::cout << day04_part1() << std::endl;
+=======
+    // std::cout << day04_part1() << std::endl;
+    std::cout << day04_part2() << std::endl;
+>>>>>>> 72e7ba6 (Solve day 4 part 2)
 
     return 0;
 }

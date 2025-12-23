@@ -49,5 +49,29 @@ day04_part1()
 int
 day04_part2()
 {
-    return 0;
+    std::vector<std::string> data = utils::read_file("input/day04.txt");
+    std::vector<std::string> data_clone = data; // is clone, not an assignment
+
+    int count_removable, count_removable_total = 0;
+
+    do
+    {
+        count_removable = 0; //reset
+        for (int i = 0; i < data.size(); ++i)
+        {
+            for (int j = 0; j < data[i].size(); ++j)
+            {
+                if (count_existing_neighbours(data, i, j) < 4 && data[i][j] == '@')
+                {
+                    data_clone[i][j] = 'x';
+                    ++count_removable;
+                    ++count_removable_total;
+                }
+            }
+        }
+        data = data_clone;
+    } while (count_removable > 0);
+
+
+    return count_removable_total;
 }
