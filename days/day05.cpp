@@ -5,7 +5,9 @@
 #include <iostream>
 #include "utils.hpp"
 
-enum state{
+enum
+state
+{
     READING_RANGES,
     READING_INGREDIENTS
 };
@@ -20,15 +22,21 @@ public:
         : lower(lower_),
           upper(upper_) {}
 
-    bool has_item(long n) const {
+    bool
+    has_item(long n) const
+    {
         return n >= lower && n <= upper;
     }
 
-    long size() const {
+    long
+    size() const
+    {
         return upper - lower + 1;
     }
 
-    static std::optional<Range> merge(const Range& r1, const Range& r2) {
+    static std::optional<Range>
+    merge(const Range& r1, const Range& r2)
+    {
         if (r1.upper < r2.lower || r2.upper < r1.lower) {
             return std::nullopt;
         }
@@ -42,7 +50,9 @@ public:
     // -----------------------
     // Iterator support
     // -----------------------
-    class iterator {
+    class
+    iterator
+    {
         long current;
     public:
         explicit iterator(long start) : current(start) {}
@@ -55,8 +65,11 @@ public:
     iterator end() const { return iterator(upper + 1); }  // +1 because 
 };
 
-std::vector<Range> compress_ranges(std::vector<Range> ranges) {
-    if (ranges.empty()) return {};
+std::vector<Range>
+compress_ranges(std::vector<Range> ranges)
+{
+    if (ranges.empty())
+        return {};
 
     // Sort ranges by lower bound
     std::sort(ranges.begin(), ranges.end(),
@@ -65,7 +78,8 @@ std::vector<Range> compress_ranges(std::vector<Range> ranges) {
     std::vector<Range> result;
     result.push_back(ranges[0]);
 
-    for (int i = 1; i < ranges.size(); ++i) {
+    for (int i = 1; i < ranges.size(); ++i)
+    {
         auto merged = Range::merge(result.back(), ranges[i]);
         if (merged) {
             // Merge overlapping ranges
