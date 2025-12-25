@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include <iostream>
 #include "utils.hpp"
 
 #define PART2_LEVEL 12
@@ -11,31 +12,30 @@ day03_part1()
     int total = 0;
 
     for (std::string line : data) {
-        int left, right;
+        char left = 0;
+        size_t left_pos = 0;
+        char right = 0;
 
-        for (int search_digit = 9 ; search_digit >= 0; --search_digit)
+        for (size_t i = 0; i < line.length() - 1; ++i)
         {
-            for (int i = 0; i < line.length() - 1; ++i)
+            if (line[i] > left)
             {
-                if (line[i] - '0' == search_digit)
-                {
-                    for (int search_digit_right = 9; search_digit_right >= 0; --search_digit_right)
-                    {
-                        for (int j = i + 1; j < line.length(); ++j) 
-                        {
-                            if (line[j] - '0' == search_digit_right)
-                            {
-                                left = search_digit;
-                                right = search_digit_right;
-                                total += left*10 + right;
-                                goto proceed_to_next_line;
-                            }
-                        }
-                    }
-                }
+                left = line[i];
+                left_pos = i;
             }
         }
-proceed_to_next_line:
+
+        for (size_t i = left_pos + 1; i < line.length(); ++i)
+        {
+            if (line[i] > right)
+            {
+                right = line[i];
+            }
+        }
+
+        std::cout<<left<<right<<std::endl;
+
+        total += (left - '0')*10 + (right - '0');
     }
     return total;
 }
@@ -57,43 +57,76 @@ bool find_digits(
     if (depth == num_of_batteries)
         return true;
 
-    for (int d = 9; d >= 0; --d)
+    // Re: Search domains
+    // 
+    // The search process here is simple.   Let's assume length of 10 is split into 2.
+    //     xxxxxxxxxx
+    // For the first digit, we'll search from the first index to second to the last.
+    //     +++++++++x (first digit search domain)
+    // After which the second digit is search from the position of the max to the last.
+    //     xxx+++++++
+    //       ^
+    //       ^
+    //       We assume that the max first digit is here.
+    //
+    // This can be generalised into higher splits by minimising the search domain.
+    // The key insight: we must reserve space for the remaining digits.   If we need to
+    // extract 'k' more digits after the current one, we must stop our search 'k'
+    // positions before the end to ensure enough characters remain.
+    //
+    // Example: 3 batteries, string "4817293650" (length 10)
+    //
+    // Depth 0 (finding 1st digit):
+    //   Need to reserve 2 positions for digits 2 and 3
+    //   Search domain: indices 0-7
+    //   
+    //   4 8 1 7 2 9 3 6 5 0
+    //   + + + + + + + + - -   (+ = search, - = reserved)
+    //   |-------------|
+    //     Find max='9' at position 5
+    //
+    // Depth 1 (finding 2nd digit):
+    //   Start from position 6 (after the '9')
+    //   Need to reserve 1 position for digit 3
+    //   Search domain: indices 6-8
+    //   
+    //   4 8 1 7 2 9 3 6 5 0
+    //   - - - - - - + + + -   (start at pos 6)
+    //               |---|
+    //     Find max='6' at position 7
+    //
+    // Depth 2 (finding 3rd digit):
+    //   Start from position 8 (after the '6')
+    //   Need to reserve 0 positions
+    //   Search domain: indices 8-9
+    //   
+    //   4 8 1 7 2 9 3 6 5 0
+    //   - - - - - - - - + +   (start at pos 8)
+    //                   |-|
+    //     Find max='5' at position 8
+    //
+    // Result: digits = [9, 6, 5] (the maximum number from 3 non-overlapping digits)
+    //
+    // The loop bound: i < line.length() - (num_of_batteries - depth - 1)
+    //   - num_of_batteries - depth = total digits still needed (including current)
+    //   - num_of_batteries - depth - 1 = digits needed AFTER current digit
+    //   - This ensures we leave enough characters for subsequent recursive calls
+    
+    char max = '0';
+    int max_pos = 0;
+    for (int i = pos; i < line.length() - (num_of_batteries - depth - 1); ++i)
     {
-        // Re:Upper search limit.
-        //
-        // Notice how in the 2 digit case, the upper level has domain of length - 1 and the lower
-        // level has length.   This is for safety purposes (I encountered them earlier, though
-        // I can't seem to re-create it any more.   This safety "barrier" seems to be generalizable to:
-        //
-        //         num of batteries - current depth - 1
-        //
-        // For sanity check: at the first part, at depth=0, number of batteries=2
-        //         2 - 0 - 1    -->    1  (meaning we leave 1 digit)
-        // and given a situation like this:
-        //         XXXXXXXXXXXXXXX
-        // the search domain for the first level is:
-        //         ++++++++++++++X
-        //
-        // Then at the second level at depth=1, 
-        //         2 - 1 - 1    -->    0  (meaning last item is included in search domain)
-        // with the search domainS (plural) being like this:
-        //         X++++++++++++++ (if a 'good' number if found at index 0)
-        //         XX+++++++++++++ (if a 'good' number if found at index 1)
-        //
-        // This constraint prevents out-of-range searches and guarantees that
-        // deeper recursive calls can still succeed.   (NOTE: In my case, I DIDN'T have to do it,
-        // but like I said, I encountered a similar error.  So better safe than sorry.)
-        for (int i = pos; i < line.length() - (num_of_batteries - depth - 1); ++i)
+        if (line[i] > max)
         {
-            if (line[i] - '0' == d)
-            {
-                digits[depth] = d;
-                if (find_digits(line, i + 1, depth + 1, num_of_batteries, digits))
-                {
-                    return true;
-                }
-            }
+            max = line[i];
+            max_pos = i;
         }
+    }
+
+    digits[depth] = max - '0';
+    if (find_digits(line, max_pos + 1, depth + 1, num_of_batteries, digits))
+    {
+        return true;
     }
     return false;
 }
