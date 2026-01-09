@@ -62,7 +62,7 @@ public:
     };
 
     iterator begin() const { return iterator(lower); }
-    iterator end() const { return iterator(upper + 1); }  // +1 because 
+    iterator end() const { return iterator(upper + 1); }  // +1 because
 };
 
 std::vector<Range>
@@ -101,24 +101,24 @@ day05_part1()
     std::vector<long> ingredients;
 
     int state = READING_RANGES;
-    
+
     long fresh_count = 0;
 
     for (std::string line : data)
-    {        
+    {
         std::vector<std::string> range_data = utils::split(line, "-");
         if (state == READING_RANGES)
         {
-            
+
             if (line.empty())
             {
                 state = READING_INGREDIENTS;
                 continue;
             }
-            
+
             // We're ASSUMING here that `range_data` only decomposes to two elements.
             ranges.push_back(Range{std::stol(range_data[0]), std::stol(range_data[1])});
-            
+
             std::cout<<line<<std::endl;
         } else if (state == READING_INGREDIENTS)
         {
@@ -130,19 +130,16 @@ day05_part1()
 
     for (float ingredient : ingredients)
     {
-        bool is_fresh = false;
-
         for (Range range : ranges)
         {
-            is_fresh = range.has_item(ingredient) || is_fresh;
-        }
-
-        if (is_fresh)
-        {
-            ++fresh_count;
+            if (range.has_item(ingredient))
+            {
+                ++fresh_count;
+                break;
+            }
         }
     }
-   
+
     return fresh_count;
 }
 
@@ -155,17 +152,17 @@ day05_part2()
     long total = 0;
 
     for (std::string line : data)
-    {        
+    {
         std::vector<std::string> range_data = utils::split(line, "-");
-            
+
         if (line.empty())
         {
             break;
         }
-        
+
         // We're ASSUMING here that `range_data` only decomposes to two elements.
         ranges.push_back(Range{std::stol(range_data[0]), std::stol(range_data[1])});
-        
+
         std::cout<<line<<std::endl;
     }
 
@@ -175,6 +172,6 @@ day05_part2()
     {
         total += range.size();
     }
-    
+
     return total;
 }
