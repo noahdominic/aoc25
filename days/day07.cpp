@@ -1,20 +1,18 @@
-#include <string>
-#include <vector>
-#include <iostream>
-#include <bitset>
-#include <algorithm>
 #include "utils.hpp"
+#include <algorithm>
+#include <bitset>
+#include <iostream>
 #include <set>
+#include <string>
 #include <unordered_map>
+#include <vector>
 
 #define EMPTY_SPACE '.'
 #define SOURCE 'S'
 #define SPLITTER '^'
 #define LIGHT '|'
 
-long
-day07_part1()
-{
+long day07_part1() {
     std::vector<std::string> data = utils::read_file("input/day07.txt");
     std::set<size_t> light_idxs;
 
@@ -50,13 +48,13 @@ day07_part1()
     return splitter_count;
 }
 
-struct Vertex
-{
+struct Vertex {
     size_t x;
     size_t y;
 
     bool operator<(const Vertex& other) const {
-        if (x != other.x) return x < other.x;
+        if (x != other.x)
+            return x < other.x;
         return y < other.y;
     }
 
@@ -72,12 +70,10 @@ struct VertexHash {
     }
 };
 
-long
-dfs(Vertex current,
-    std::unordered_map<Vertex, std::set<Vertex>, VertexHash>& graph,
-    std::vector<Vertex>& targets,
-    std::unordered_map<Vertex, long, VertexHash>& memo)
-{
+long dfs(Vertex current,
+         std::unordered_map<Vertex, std::set<Vertex>, VertexHash>& graph,
+         std::vector<Vertex>& targets,
+         std::unordered_map<Vertex, long, VertexHash>& memo) {
     // If we've already computed the number of paths from this vertex, return it
     auto memo_it = memo.find(current);
     if (memo_it != memo.end()) {
@@ -104,18 +100,15 @@ dfs(Vertex current,
     return count;
 }
 
-long
-count_paths_to_all_lowest_row(Vertex source,
+long count_paths_to_all_lowest_row(
+    Vertex source,
     std::unordered_map<Vertex, std::set<Vertex>, VertexHash> adjacency_graph,
-    std::vector<Vertex> targets)
-{
+    std::vector<Vertex> targets) {
     std::unordered_map<Vertex, long, VertexHash> memo;
     return dfs(source, adjacency_graph, targets, memo);
 }
 
-long
-day07_part2()
-{
+long day07_part2() {
     std::vector<std::string> data = utils::read_file("input/day07.txt");
     std::unordered_map<Vertex, std::set<Vertex>, VertexHash> adjacency_graph;
 
@@ -147,15 +140,15 @@ day07_part2()
                 // Insert new light positions if within bounds
                 if (splitter_idx > 0) {
                     light_idxs.insert(splitter_idx - 1);
-                    adjacency_graph[Vertex{scan_idx - 1, splitter_idx}].insert(Vertex{scan_idx, splitter_idx - 1});
+                    adjacency_graph[Vertex{scan_idx - 1, splitter_idx}].insert(
+                        Vertex{scan_idx, splitter_idx - 1});
                     data[scan_idx][splitter_idx - 1] = LIGHT;
-
                 }
                 if (splitter_idx + 1 < data[0].size()) {
                     light_idxs.insert(splitter_idx + 1);
-                    adjacency_graph[Vertex{scan_idx - 1, splitter_idx}].insert(Vertex{scan_idx, splitter_idx + 1});
+                    adjacency_graph[Vertex{scan_idx - 1, splitter_idx}].insert(
+                        Vertex{scan_idx, splitter_idx + 1});
                     data[scan_idx][splitter_idx + 1] = LIGHT;
-
                 }
 
                 light_idxs.erase(splitter_idx);
@@ -165,11 +158,11 @@ day07_part2()
         // Connect unsplit lights to the next row
         for (size_t light_idx : light_idxs) {
             if (splitter_idxs.count(light_idx) == 0) {
-                if (data[scan_idx-1][light_idx] == LIGHT || data[scan_idx-1][light_idx] == SOURCE)
-                {
+                if (data[scan_idx - 1][light_idx] == LIGHT ||
+                    data[scan_idx - 1][light_idx] == SOURCE) {
                     data[scan_idx][light_idx] = LIGHT;
-                    adjacency_graph[Vertex{scan_idx - 1, light_idx}].insert(Vertex{scan_idx, light_idx});
-                
+                    adjacency_graph[Vertex{scan_idx - 1, light_idx}].insert(
+                        Vertex{scan_idx, light_idx});
                 }
             }
         }
@@ -183,5 +176,6 @@ day07_part2()
         }
     }
 
-    return count_paths_to_all_lowest_row(Vertex{0, source_pos}, adjacency_graph, targets);
+    return count_paths_to_all_lowest_row(Vertex{0, source_pos}, adjacency_graph,
+                                         targets);
 }

@@ -1,7 +1,7 @@
+#include "utils.hpp"
 #include <cmath>
 #include <string>
 #include <vector>
-#include "utils.hpp"
 
 // The 'knob' doesn't go above 99 and loops back to 0
 #define MAX_VALUE 100
@@ -9,10 +9,7 @@
 // This is declared in the problem description as the starting position.
 #define INITIAL_POS 50
 
-
-int    
-day01_part1()
-{
+int day01_part1() {
     int current_pos, zero_counter;
 
     current_pos = INITIAL_POS;
@@ -32,15 +29,13 @@ day01_part1()
         // The below calculates the positive modulo out of the negative, which
         // is the default in C++.   For more info, check out
         // https://en.wikipedia.org/wiki/Modulo
-        current_pos = ((current_pos % MAX_VALUE) + MAX_VALUE) % MAX_VALUE; 
+        current_pos = ((current_pos % MAX_VALUE) + MAX_VALUE) % MAX_VALUE;
     }
 
     return zero_counter;
 }
 
-int
-day01_part2()
-{
+int day01_part2() {
     int current_pos, zero_counter;
 
     current_pos = INITIAL_POS;
@@ -70,15 +65,19 @@ day01_part2()
             k0 = MAX_VALUE - current_pos;
         }
 
-        if (k0 == 0) k0 = MAX_VALUE;
+        if (k0 == 0)
+            k0 = MAX_VALUE;
 
         if (abs(delta) >= k0) {
-            zero_counter += 1 + (abs(delta) - k0) / MAX_VALUE; // 1 initial zero count after k0 which is also reason why we subtract k0 from delta.
+            zero_counter +=
+                1 + (abs(delta) - k0) /
+                        MAX_VALUE; // 1 initial zero count after k0 which is
+                                   // also reason why we subtract k0 from delta.
         }
 
         current_pos += delta;
         current_pos = (((current_pos % MAX_VALUE) + MAX_VALUE) % MAX_VALUE);
-        }
+    }
 
     return zero_counter;
 }
