@@ -40,15 +40,8 @@ day07_part1()
         for (size_t splitter_idx : splitter_idxs) {
             if (light_idxs.count(splitter_idx)) {
                 ++splitter_count;
-
-                // Insert new light positions if within bounds
-                if (splitter_idx > 0) {
-                    light_idxs.insert(splitter_idx - 1);
-                }
-                if (splitter_idx + 1 < data[0].size()) {
-                    light_idxs.insert(splitter_idx + 1);
-                }
-
+                light_idxs.insert(splitter_idx - 1);
+                light_idxs.insert(splitter_idx + 1);
                 light_idxs.erase(splitter_idx);
             }
         }
